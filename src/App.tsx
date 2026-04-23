@@ -7,6 +7,7 @@ import { Navbar } from './components/Navbar';
 import { Hero } from './components/Hero';
 import { ProblemsList } from './components/ProblemsList';
 import { Chatbot } from './components/Chatbot';
+import { Logo } from './components/Logo';
 import { ShieldCheck, Target, HeartHandshake } from 'lucide-react';
 import { motion } from 'motion/react';
 import { useState, type ReactNode } from 'react';
@@ -72,14 +73,18 @@ export default function App() {
         </section>
       </main>
 
-      <footer className="py-12 px-6 bg-slate-50 border-t border-slate-200 text-center">
-        <p className="text-slate-500 text-sm mb-4">
-          © 2026 Guide4U by Lutfullahil Karim. All rights reserved.
-        </p>
-        <div className="flex justify-center gap-6 text-slate-400 text-sm">
+      <footer className="py-16 px-6 bg-white border-t border-slate-100 flex flex-col items-center gap-8">
+        <Logo />
+        <div className="flex flex-wrap justify-center gap-x-8 gap-y-4 text-slate-500 font-medium text-sm">
+          <a href="#home" className="hover:text-indigo-600 transition-colors">Home</a>
+          <a href="#problems" className="hover:text-indigo-600 transition-colors">Solutions</a>
+          <a href="#about" className="hover:text-indigo-600 transition-colors">About Ishmam</a>
           <a href="#" className="hover:text-indigo-600 transition-colors">Privacy Policy</a>
-          <a href="#" className="hover:text-indigo-600 transition-colors">Terms of Use</a>
-          <a href="#" className="hover:text-indigo-600 transition-colors">Safety Center</a>
+        </div>
+        <div className="pt-8 border-t border-slate-100 w-full max-w-2xl text-center">
+          <p className="text-slate-400 text-xs">
+            © 2026 Guide4U by Lutfullahil Karim (Class 10). All rights reserved.
+          </p>
         </div>
       </footer>
 

@@ -84,8 +84,8 @@ export function Chatbot({ isOpen, onToggle }: ChatbotProps) {
             {/* Header */}
             <div className="p-4 bg-gradient-to-r from-indigo-600 to-purple-600 text-white flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-sm">
-                  <Bot className="w-6 h-6" />
+                <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center backdrop-blur-sm overflow-hidden p-1">
+                  <img src="https://i.postimg.cc/4dYrHMsM/1000026494-removebg-preview.png" alt="Bot Logo" className="w-full h-full object-contain" referrerPolicy="no-referrer" />
                 </div>
                 <div>
                   <h4 className="font-bold text-sm">Guide4U AI</h4>
