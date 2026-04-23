@@ -5,9 +5,10 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { MessageSquare, Send, X, Bot, User, Loader2 } from 'lucide-react';
+import { MessageSquare, Send, X, Bot, User, Loader2, RefreshCw } from 'lucide-react';
 import { getTeensAdvice } from '../services/geminiService';
 import { cn } from '../lib/utils';
+import ReactMarkdown from 'react-markdown';
 
 interface Message {
   role: 'user' | 'model';
@@ -42,15 +43,18 @@ export function Chatbot({ isOpen, onToggle }: ChatbotProps) {
     setIsLoading(true);
 
     try {
-      const history = messages.map(m => ({
+      const history = messages.slice(0, -1).map(m => ({
         role: m.role,
         parts: [{ text: m.content }]
       }));
       
       const response = await getTeensAdvice(userMessage, history);
-      setMessages(prev => [...prev, { role: 'model', content: response || "I'm sorry, I couldn't process that." }]);
+      if (!response) throw new Error("No response from AI");
+      
+      setMessages(prev => [...prev, { role: 'model', content: response }]);
     } catch (error) {
-      setMessages(prev => [...prev, { role: 'model', content: "Oops! My brain froze. Could you try again?" }]);
+      console.error("Chat Error:", error);
+      setMessages(prev => [...prev, { role: 'model', content: "Oops! I encountered an issue connecting to my brain. Please check your internet or try again in a moment." }]);
     } finally {
       setIsLoading(false);
     }
@@ -117,12 +121,16 @@ export function Chatbot({ isOpen, onToggle }: ChatbotProps) {
                     {m.role === 'user' ? <User className="w-5 h-5" /> : <Bot className="w-5 h-5" />}
                   </div>
                   <div className={cn(
-                    "max-w-[80%] px-4 py-2.5 rounded-2xl text-sm font-body leading-relaxed",
+                    "max-w-[85%] px-4 py-2.5 rounded-2xl text-sm font-body leading-relaxed",
                     m.role === 'user' 
                       ? "bg-indigo-600 text-white rounded-tr-none" 
-                      : "bg-white text-slate-800 shadow-sm border border-slate-100 rounded-tl-none"
+                      : "bg-white text-slate-800 shadow-sm border border-slate-100 rounded-tl-none prose prose-slate prose-sm max-w-none"
                   )}>
-                    {m.content}
+                    {m.role === 'model' ? (
+                      <ReactMarkdown>{m.content}</ReactMarkdown>
+                    ) : (
+                      m.content
+                    )}
                   </div>
                 </div>
               ))}
