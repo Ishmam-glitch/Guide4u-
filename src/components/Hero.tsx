@@ -23,8 +23,8 @@ export function Hero() {
             For Teens, By Teens
           </span>
           <h1 className="text-5xl md:text-7xl font-bold tracking-tight mb-8 leading-[1.1]">
-            Your Ultimate Guide to <br />
-            <span className="text-gradient">Teen Life & Success</span>
+            <span className="text-gradient">Remove your anxiety.</span> <br />
+            Find your peace within.
           </h1>
           <p className="text-lg md:text-xl text-slate-600 mb-10 max-w-2xl mx-auto leading-relaxed font-body">
             Navigating age 13 to 17 can be tough. From academic stress to social circles, 

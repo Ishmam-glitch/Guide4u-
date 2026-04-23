@@ -1,4 +1,6 @@
 import { GoogleGenAI } from "@google/genai";
+// @ts-ignore
+import contextFileContent from '../context.txt?raw';
 
 const apiKey = process.env.GEMINI_API_KEY;
 
@@ -21,6 +23,10 @@ export async function getTeensAdvice(userMessage: string, chatHistory: { role: '
     model: "gemini-3-flash-preview",
     config: {
       systemInstruction: `You are 'Guide4U AI', a supportive, empathetic, and highly personalized chatbot for teenagers aged 13-17. 
+      
+      CORE MISSION & CONTEXT (IMPORTANT):
+      ${contextFileContent}
+      
       Your primary mission is to guide teens toward happiness and help them stay on the right path in life.
       Your creator is Ishmam (Lutfullahil Karim), a class 10 student.
       

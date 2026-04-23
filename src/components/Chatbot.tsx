@@ -17,7 +17,7 @@ interface Message {
 export function Chatbot() {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([
-    { role: 'model', content: "Hey! I'm Guide4U AI. Need advice on school, friends, or life? I'm here to listen." }
+    { role: 'model', content: "Hey! I'm Guide4U AI. I'm here to help you stay happy and find the right path in life. What's on your mind today?" }
   ]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);

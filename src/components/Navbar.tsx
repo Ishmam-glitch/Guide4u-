@@ -3,20 +3,13 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Sparkles } from 'lucide-react';
+import { Logo } from './Logo';
 
 export function Navbar() {
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 px-6 py-4">
       <div className="max-w-7xl mx-auto flex items-center justify-between glass rounded-2xl px-6 py-3">
-        <div className="flex items-center gap-2">
-          <div className="w-10 h-10 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
-            <Sparkles className="text-white w-6 h-6" />
-          </div>
-          <span className="text-xl font-bold tracking-tight text-slate-800">
-            Guide<span className="text-indigo-600">4U</span>
-          </span>
-        </div>
+        <Logo />
         
         <div className="hidden md:flex items-center gap-8 text-sm font-medium text-slate-600">
           <a href="#home" className="hover:text-indigo-600 transition-colors">Home</a>
