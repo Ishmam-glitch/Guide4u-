@@ -9,12 +9,14 @@ import { ProblemsList } from './components/ProblemsList';
 import { Chatbot } from './components/Chatbot';
 import { ShieldCheck, Target, HeartHandshake } from 'lucide-react';
 import { motion } from 'motion/react';
-import type { ReactNode } from 'react';
+import { useState, type ReactNode } from 'react';
 
 export default function App() {
+  const [isChatOpen, setIsChatOpen] = useState(false);
+
   return (
     <div className="min-h-screen">
-      <Navbar />
+      <Navbar onChatOpen={() => setIsChatOpen(true)} />
       
       <main>
         <Hero />
@@ -81,7 +83,7 @@ export default function App() {
         </div>
       </footer>
 
-      <Chatbot />
+      <Chatbot isOpen={isChatOpen} onToggle={(open) => setIsChatOpen(open)} />
     </div>
   );
 }

@@ -14,8 +14,12 @@ interface Message {
   content: string;
 }
 
-export function Chatbot() {
-  const [isOpen, setIsOpen] = useState(false);
+interface ChatbotProps {
+  isOpen: boolean;
+  onToggle: (open: boolean) => void;
+}
+
+export function Chatbot({ isOpen, onToggle }: ChatbotProps) {
   const [messages, setMessages] = useState<Message[]>([
     { role: 'model', content: "Hey! I'm Guide4U AI. I'm here to help you stay happy and find the right path in life. What's on your mind today?" }
   ]);
@@ -56,7 +60,7 @@ export function Chatbot() {
     <>
       {/* Toggle Button */}
       <button
-        onClick={() => setIsOpen(true)}
+        onClick={() => onToggle(true)}
         className={cn(
           "fixed bottom-6 right-6 w-16 h-16 rounded-full bg-indigo-600 text-white shadow-2xl flex items-center justify-center hover:scale-110 transition-all z-40 group",
           isOpen && "scale-0 opacity-0 pointer-events-none"
@@ -91,7 +95,7 @@ export function Chatbot() {
                   </p>
                 </div>
               </div>
-              <button onClick={() => setIsOpen(false)} className="hover:bg-white/10 p-2 rounded-lg transition-colors">
+              <button onClick={() => onToggle(false)} className="hover:bg-white/10 p-2 rounded-lg transition-colors">
                 <X className="w-5 h-5" />
               </button>
             </div>
