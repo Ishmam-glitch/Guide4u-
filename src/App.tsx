@@ -7,6 +7,7 @@ import { Navbar } from './components/Navbar';
 import { Hero } from './components/Hero';
 import { ProblemsList } from './components/ProblemsList';
 import { Chatbot } from './components/Chatbot';
+import { FeedbackModal } from './components/FeedbackModal';
 import { Logo } from './components/Logo';
 import { ShieldCheck, Target, HeartHandshake } from 'lucide-react';
 import { motion } from 'motion/react';
@@ -14,10 +15,14 @@ import { useState, type ReactNode } from 'react';
 
 export default function App() {
   const [isChatOpen, setIsChatOpen] = useState(false);
+  const [isFeedbackOpen, setIsFeedbackOpen] = useState(false);
 
   return (
     <div className="min-h-screen">
-      <Navbar onChatOpen={() => setIsChatOpen(true)} />
+      <Navbar 
+        onChatOpen={() => setIsChatOpen(true)} 
+        onFeedbackOpen={() => setIsFeedbackOpen(true)}
+      />
       
       <main>
         <Hero />
@@ -79,6 +84,12 @@ export default function App() {
           <a href="#home" className="hover:text-indigo-600 transition-colors">Home</a>
           <a href="#problems" className="hover:text-indigo-600 transition-colors">Solutions</a>
           <a href="#about" className="hover:text-indigo-600 transition-colors">About Ishmam</a>
+          <button 
+            onClick={() => setIsFeedbackOpen(true)}
+            className="hover:text-indigo-600 transition-colors cursor-pointer"
+          >
+            Feedback
+          </button>
           <a href="#" className="hover:text-indigo-600 transition-colors">Privacy Policy</a>
         </div>
         <div className="pt-8 border-t border-slate-100 w-full max-w-2xl text-center">
@@ -89,6 +100,7 @@ export default function App() {
       </footer>
 
       <Chatbot isOpen={isChatOpen} onToggle={(open) => setIsChatOpen(open)} />
+      <FeedbackModal isOpen={isFeedbackOpen} onClose={() => setIsFeedbackOpen(false)} />
     </div>
   );
 }
