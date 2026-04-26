@@ -43,7 +43,7 @@ export function Chatbot({ isOpen, onToggle }: ChatbotProps) {
     setIsLoading(true);
 
     try {
-      const history = messages.slice(0, -1).map(m => ({
+      const history = messages.map(m => ({
         role: m.role,
         parts: [{ text: m.content }]
       }));

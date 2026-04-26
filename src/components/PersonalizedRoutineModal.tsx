@@ -9,29 +9,17 @@ import { useState, useRef, useEffect } from 'react';
 import { getTeensAdvice } from '../services/geminiService';
 import Markdown from 'react-markdown';
 
-const QUESTIONS = [
-  { id: 'schoolStart', question: "First things first, what time does your school start?" },
-  { id: 'schoolEnd', question: "And when does it usually end?" },
-  { id: 'wakeUp', question: "What time do you usually wake up in the morning?" },
-  { id: 'bedTime', question: "When do you typically head to bed?" },
-  { id: 'tuition', question: "Do you have any private tuition? If so, what time(s)?" }
-];
-
 interface Message {
   role: 'bot' | 'user';
   text: string;
 }
 
 export function PersonalizedRoutineModal({ isOpen, onClose }: { isOpen: boolean, onClose: () => void }) {
-  const [step, setStep] = useState(0);
-  const [answers, setAnswers] = useState<Record<string, string>>({});
   const [messages, setMessages] = useState<Message[]>([
-    { role: 'bot', text: "Hey! I'm Ishmam's AI guide. I'm here to help you build a routine that actually works for you. Let's start with a few questions." },
-    { role: 'bot', text: QUESTIONS[0].question }
+    { role: 'bot', text: "Hey! I'm Ishmam's AI guide. I'm here to help you build a routine that actually works for you. How's your day usually planned out? Tell me about your tasks or when things happen!" }
   ]);
   const [inputValue, setInputValue] = useState('');
   const [isGenerating, setIsGenerating] = useState(false);
-  const [generatedRoutine, setGeneratedRoutine] = useState<string | null>(null);
   
   const scrollRef = useRef<HTMLDivElement>(null);
 
@@ -39,63 +27,48 @@ export function PersonalizedRoutineModal({ isOpen, onClose }: { isOpen: boolean,
     if (scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
     }
-  }, [messages, isGenerating, generatedRoutine]);
+  }, [messages, isGenerating]);
 
   const handleSend = async () => {
-    if (!inputValue.trim()) return;
+    if (!inputValue.trim() || isGenerating) return;
 
-    const currentAnswer = inputValue.trim();
-    const currentQuestionId = QUESTIONS[step].id;
-    
-    setMessages(prev => [...prev, { role: 'user', text: currentAnswer }]);
-    const updatedAnswers = { ...answers, [currentQuestionId]: currentAnswer };
-    setAnswers(updatedAnswers);
+    const userMsg = inputValue.trim();
+    setMessages(prev => [...prev, { role: 'user', text: userMsg }]);
     setInputValue('');
+    setIsGenerating(true);
 
-    if (step < QUESTIONS.length - 1) {
-      const nextStep = step + 1;
-      setStep(nextStep);
-      setTimeout(() => {
-        setMessages(prev => [...prev, { role: 'bot', text: QUESTIONS[nextStep].question }]);
-      }, 500);
-    } else {
-      // All questions answered, generate routine
-      setIsGenerating(true);
-      setMessages(prev => [...prev, { role: 'bot', text: "Got it! Thanks for sharing. I'm crafting your personalized routine right now... 🧪✨" }]);
-      
-      try {
-        const prompt = `
-          Generate a personalized daily routine for a teenager based on these details:
-          - School starts: ${updatedAnswers.schoolStart || 'Not specified'}
-          - School ends: ${updatedAnswers.schoolEnd || 'Not specified'}
-          - Wakes up: ${updatedAnswers.wakeUp || 'Not specified'}
-          - Bedtime: ${updatedAnswers.bedTime || 'Not specified'}
-          - Tuition: ${updatedAnswers.tuition || 'Not specified'}
+    try {
+      const history = messages.map(m => ({
+        role: m.role === 'bot' ? 'model' as const : 'user' as const,
+        parts: [{ text: m.text }]
+      }));
 
-          Format the routine with clear time slots and emojis. Make it encouraging, non-judgmental, and focused on balance (study, rest, social). 
-          Keep it concise but detailed enough to be useful. Focus on being a supportive guide (Guide4U).
-          Start the response with a friendly encouraging remark.
-        `;
+      // Extra context for the routine builder
+      const routinePrompt = `
+        User response: "${userMsg}"
         
-        const result = await getTeensAdvice(prompt, []);
-        setGeneratedRoutine(result);
-      } catch (error) {
-        console.error("Error generating routine:", error);
-        setMessages(prev => [...prev, { role: 'bot', text: "Oops! I hit a snag while generating your routine. Could you try again?" }]);
-      } finally {
-        setIsGenerating(false);
-      }
+        Your Goal: Help the user build a personalized daily routine. 
+        - Ask about their day naturally.
+        - Ask about school times, wake up, bed time, tuition, or any other tasks they have.
+        - When they give you enough information, or if they ask for the routine, provide a clear, formatted daily routine using Markdown (time slots, emojis, encouraging tone).
+        - Focus on balance (study, rest, hobbies).
+        - Be supportive and non-judgmental.
+      `;
+      
+      const result = await getTeensAdvice(routinePrompt, history);
+      setMessages(prev => [...prev, { role: 'bot', text: result }]);
+    } catch (error) {
+      console.error("Error in routine chat:", error);
+      setMessages(prev => [...prev, { role: 'bot', text: "Oops! I had a little technical glitch. Could you try saying that again?" }]);
+    } finally {
+      setIsGenerating(false);
     }
   };
 
   const reset = () => {
-    setStep(0);
-    setAnswers({});
     setMessages([
-      { role: 'bot', text: "Hey! I'm Ishmam's AI guide. I'm here to help you build a routine that actually works for you. Let's start with a few questions." },
-      { role: 'bot', text: QUESTIONS[0].question }
+      { role: 'bot', text: "Hey! I'm Ishmam's AI guide. I'm here to help you build a routine that actually works for you. How's your day usually planned out? Tell me about your tasks or when things happen!" }
     ]);
-    setGeneratedRoutine(null);
     setInputValue('');
   };
 
@@ -159,7 +132,13 @@ export function PersonalizedRoutineModal({ isOpen, onClose }: { isOpen: boolean,
                         ? 'bg-white text-slate-800 rounded-tl-none border border-slate-100' 
                         : 'bg-indigo-600 text-white rounded-tr-none'
                     }`}>
-                      {m.text}
+                      {m.role === 'bot' ? (
+                        <div className="prose prose-sm prose-indigo max-w-none">
+                          <Markdown>{m.text}</Markdown>
+                        </div>
+                      ) : (
+                        m.text
+                      )}
                     </div>
                   </div>
                 </motion.div>
@@ -173,34 +152,10 @@ export function PersonalizedRoutineModal({ isOpen, onClose }: { isOpen: boolean,
                   </div>
                 </div>
               )}
-
-              {generatedRoutine && (
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="bg-white border border-indigo-100 rounded-2xl p-6 mt-4 shadow-md overflow-hidden relative"
-                >
-                  <div className="absolute top-0 left-0 w-full h-1 bg-indigo-500" />
-                  <div className="flex items-center gap-2 mb-4 text-indigo-700 font-bold">
-                    <Sparkles className="w-5 h-5 text-indigo-500" />
-                    <span>Your Personalized Routine</span>
-                  </div>
-                  <div className="prose prose-sm prose-indigo max-w-none prose-p:leading-relaxed prose-li:my-1 text-slate-700">
-                    <Markdown>{generatedRoutine}</Markdown>
-                  </div>
-                  <button 
-                    onClick={reset}
-                    className="mt-6 w-full py-4 bg-indigo-50 text-indigo-600 rounded-xl font-bold hover:bg-indigo-100 transition-all flex items-center justify-center gap-2"
-                  >
-                    Create Another Routine
-                  </button>
-                </motion.div>
-              )}
             </div>
 
             {/* Input */}
-            {!generatedRoutine && (
-              <div className="p-4 border-t border-slate-100 bg-white shrink-0">
+            <div className="p-4 border-t border-slate-100 bg-white shrink-0">
                 <div className="relative max-w-lg mx-auto">
                   <input 
                     type="text"
@@ -218,11 +173,18 @@ export function PersonalizedRoutineModal({ isOpen, onClose }: { isOpen: boolean,
                     <Send className="w-5 h-5" />
                   </button>
                 </div>
-                <p className="text-[10px] text-slate-400 mt-3 text-center uppercase tracking-widest font-bold font-sans">
-                  Crafted by Ishmam's Supportive AI
-                </p>
+                <div className="flex justify-between items-center mt-3">
+                  <p className="text-[10px] text-slate-400 uppercase tracking-widest font-bold font-sans">
+                    Crafted by Ishmam's AI
+                  </p>
+                  <button 
+                    onClick={reset}
+                    className="text-[10px] text-indigo-600 font-bold uppercase hover:underline"
+                  >
+                    Reset Chat
+                  </button>
+                </div>
               </div>
-            )}
           </motion.div>
         </div>
       )}
