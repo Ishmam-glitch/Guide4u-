@@ -50,7 +50,7 @@ export function Hero({ onRoutineOpen }: { onRoutineOpen: () => void }) {
           </div>
 
           <p className="mt-8 text-sm text-slate-400 italic">
-            Crafted by Ishmam Karim · Class 10 Student
+            Crafted by Ishmam Karim · Milestone School and College
           </p>
         </motion.div>
       </div>

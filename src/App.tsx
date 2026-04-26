@@ -65,16 +65,16 @@ export default function App() {
             >
               <h2 className="text-4xl font-bold mb-8">About Guide4U</h2>
               <p className="text-xl text-indigo-100 mb-12 leading-relaxed font-light">
-                "As a class 10 student, I know how hard it can be to find reliable, non-judgmental 
-                advice that actually makes sense. I created Guide4U to be the companion I wish I 
-                had when things get overwhelming."
+                "As a 10th-grade student at Milestone School and College, I know how hard it can be to find reliable, non-judgmental 
+                advice that actually makes sense. I'm deeply passionate about technology and sports like football, and I created Guide4U 
+                to be the companion I wish I had when things get overwhelming."
               </p>
               <div className="flex flex-col items-center">
                 <div className="w-20 h-20 bg-white/10 rounded-full flex items-center justify-center backdrop-blur-xl border border-white/20 mb-4 overflow-hidden">
                    <div className="text-3xl font-bold text-white">IK</div>
                 </div>
                 <h4 className="text-2xl font-bold">Ishmam Karim</h4>
-                <p className="text-indigo-300">Creator & Student (Class 10)</p>
+                <p className="text-indigo-300">Milestone School and College · Tech & Sports Enthusiast</p>
               </div>
             </motion.div>
           </div>
@@ -97,7 +97,7 @@ export default function App() {
         </div>
         <div className="pt-8 border-t border-slate-100 w-full max-w-2xl text-center">
           <p className="text-slate-400 text-xs">
-            © 2026 Guide4U by Lutfullahil Karim (Class 10). All rights reserved.
+            © 2026 Guide4U by Lutfullahil Karim · Milestone School and College. All rights reserved.
           </p>
         </div>
       </footer>
