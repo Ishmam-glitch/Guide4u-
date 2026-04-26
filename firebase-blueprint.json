@@ -1,0 +1,22 @@
+{
+  "entities": {
+    "Feedback": {
+      "title": "User Feedback",
+      "description": "Feedback submitted by users about the Guide4U platform.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "rating": { "type": "number" },
+        "comment": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["rating", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/feedback/{feedbackId}": {
+      "schema": "Feedback",
+      "description": "Collection of feedback entries."
+    }
+  }
+}
