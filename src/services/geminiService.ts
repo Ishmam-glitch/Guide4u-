@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-export async function getTeensAdvice(userMessage: string, chatHistory: any[], mode?: string) {
+export async function getTeensAdvice(userMessage: string, chatHistory: { role: 'user' | 'model', parts: { text: string }[] }[]) {
   try {
     const response = await fetch("/api/chat", {
       method: "POST",
@@ -13,7 +13,6 @@ export async function getTeensAdvice(userMessage: string, chatHistory: any[], mo
       body: JSON.stringify({
         message: userMessage,
         history: chatHistory,
-        mode,
       }),
     });
 
