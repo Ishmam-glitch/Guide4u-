@@ -1,11 +1,18 @@
-import path from "path";
 import express from "express";
+import path from "path";
+import fs from "fs";
+import { fileURLToPath } from "url";
 import { createServer as createViteServer } from "vite";
-import app from "./api/index.ts";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+const app = express();
 
 const PORT = 3000;
 
 async function startServer() {
+  // Vite middleware for development
   if (process.env.NODE_ENV !== "production") {
     const vite = await createViteServer({
       server: { middlewareMode: true },
