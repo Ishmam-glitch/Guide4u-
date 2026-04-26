@@ -8,6 +8,7 @@ import { Hero } from './components/Hero';
 import { ProblemsList } from './components/ProblemsList';
 import { Chatbot } from './components/Chatbot';
 import { FeedbackModal } from './components/FeedbackModal';
+import { PersonalizedRoutineModal } from './components/PersonalizedRoutineModal';
 import { Logo } from './components/Logo';
 import { ShieldCheck, Target, HeartHandshake } from 'lucide-react';
 import { motion } from 'motion/react';
@@ -16,12 +17,14 @@ import { useState, type ReactNode } from 'react';
 export default function App() {
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [isFeedbackOpen, setIsFeedbackOpen] = useState(false);
+  const [isRoutineOpen, setIsRoutineOpen] = useState(false);
 
   return (
     <div className="min-h-screen">
       <Navbar 
         onChatOpen={() => setIsChatOpen(true)} 
         onFeedbackOpen={() => setIsFeedbackOpen(true)}
+        onRoutineOpen={() => setIsRoutineOpen(true)}
       />
       
       <main>
@@ -101,6 +104,7 @@ export default function App() {
 
       <Chatbot isOpen={isChatOpen} onToggle={(open) => setIsChatOpen(open)} />
       <FeedbackModal isOpen={isFeedbackOpen} onClose={() => setIsFeedbackOpen(false)} />
+      <PersonalizedRoutineModal isOpen={isRoutineOpen} onClose={() => setIsRoutineOpen(false)} />
     </div>
   );
 }
