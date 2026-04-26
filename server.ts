@@ -22,9 +22,13 @@ app.post("/api/chat", async (req, res) => {
     // Check both potential env vars
     const apiKey = process.env.GEMINI_API_KEY || process.env.GOOGLE_GENAI_API_KEY;
 
-    if (!apiKey || apiKey === "MY_GEMINI_API_KEY") {
-      console.error("Missing valid API key.");
-      return res.status(500).json({ error: "Gemini API key is not configured correctly on the server." });
+    if (!apiKey) {
+      console.error("No Gemini API key found in environment variables.");
+      return res.status(500).json({ error: "Gemini API key is missing. Please configure GEMINI_API_KEY in the AI Studio Settings > Secrets panel." });
+    }
+
+    if (apiKey === "MY_GEMINI_API_KEY") {
+      console.warn("Using placeholder 'MY_GEMINI_API_KEY'. This will likely cause API calls to fail.");
     }
 
     const ai = new GoogleGenAI({ apiKey });
