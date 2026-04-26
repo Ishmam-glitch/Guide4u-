@@ -28,7 +28,7 @@ export default function App() {
       />
       
       <main>
-        <Hero />
+        <Hero onRoutineOpen={() => setIsRoutineOpen(true)} />
         
         {/* Features Preview */}
         <section className="py-20 px-6">
