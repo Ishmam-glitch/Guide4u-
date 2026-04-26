@@ -5,11 +5,20 @@
 
 import { GoogleGenAI } from "@google/genai";
 
-const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+// We initialize inside the function to avoid crashing at module load if the key is missing
+function getAI() {
+  const apiKey = process.env.GEMINI_API_KEY;
+  if (!apiKey) {
+    throw new Error("GEMINI_API_KEY is not defined. Please configure it in your environment.");
+  }
+  return new GoogleGenAI({ apiKey });
+}
 
-export async function getTeensAdvice(userMessage: string, chatHistory: { role: 'user' | 'model', parts: { text: string }[] }[]) {
+export async function getTeensAdvice(userMessage: string, chatHistory: { role: 'user' | 'model', parts: { text: string }[] }[], customSystemInstruction?: string) {
   try {
-    const systemInstruction = `You are 'Guide4U AI', a supportive, empathetic, and highly personalized chatbot for teenagers aged 13-17. 
+    const ai = getAI();
+    
+    const defaultSystemInstruction = `You are 'Guide4U AI', a supportive, empathetic, and highly personalized chatbot for teenagers aged 13-17. 
     
     Personality: Personalized, empathetic, kind, and non-judgmental.
     Creator: Ishmam Karim (Lutfullahil Karim), Class 10 student.
@@ -20,17 +29,24 @@ export async function getTeensAdvice(userMessage: string, chatHistory: { role: '
     - Tone: Be kind, non-judgmental, and relatable. 
     - Safety: If a user mentions self-harm or serious illegal activities, direct them to speak to a trusted adult or professional counselor immediately.`;
 
-    const response = await ai.models.generateContent({
+    const finalSystemInstruction = customSystemInstruction || defaultSystemInstruction;
+
+    // Using gemini-3-flash-preview as per skill recommendation
+    const chat = ai.chats.create({
       model: "gemini-3-flash-preview",
-      contents: [...chatHistory, { role: "user", parts: [{ text: userMessage }] }],
       config: {
-        systemInstruction,
-      }
+        systemInstruction: finalSystemInstruction,
+      },
+      history: chatHistory,
     });
 
-    return response.text;
+    const result = await chat.sendMessage({ 
+      message: userMessage
+    });
+    
+    return result.text;
   } catch (error) {
-    console.error("Gemini API Error:", error);
+    console.error("Gemini AI Error:", error);
     throw error;
   }
 }
