@@ -103,24 +103,4 @@ app.post("/api/chat", async (req, res) => {
   }
 });
 
-// Vite middleware logic
-async function setupVite() {
-  if (process.env.NODE_ENV !== "production") {
-    const vite = await createViteServer({
-      server: { middlewareMode: true },
-      appType: "spa",
-    });
-    app.use(vite.middlewares);
-  } else {
-    const distPath = path.join(process.cwd(), "dist");
-    app.use(express.static(distPath));
-    app.get("*", (req, res) => {
-      res.sendFile(path.join(distPath, "index.html"));
-    });
-  }
-}
-
-// Call setupVite, but note that in production Vercel might handle static files via vercel.json
-setupVite();
-
 export default app;
