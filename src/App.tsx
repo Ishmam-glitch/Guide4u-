@@ -6,23 +6,32 @@
 import { Navbar } from './components/Navbar';
 import { Hero } from './components/Hero';
 import { ProblemsList } from './components/ProblemsList';
-import { Chatbot } from './components/Chatbot';
 import { FeedbackModal } from './components/FeedbackModal';
 import { PersonalizedRoutineModal } from './components/PersonalizedRoutineModal';
 import { Logo } from './components/Logo';
-import { ShieldCheck, Target, HeartHandshake } from 'lucide-react';
+import { Quote } from 'lucide-react';
 import { motion } from 'motion/react';
-import { useState, type ReactNode } from 'react';
+import { useState } from 'react';
+
+const QUOTES = [
+  { quote: "The only way to do great work is to love what you do.", author: "Steve Jobs", color: "border-indigo-500" },
+  { quote: "It does not matter how slowly you go as long as you do not stop.", author: "Confucius", color: "border-purple-500" },
+  { quote: "Everything you've ever wanted is on the other side of fear.", author: "George Addair", color: "border-pink-500" },
+  { quote: "Success is not final, failure is not fatal: it is the courage to continue that counts.", author: "Winston Churchill", color: "border-blue-500" },
+  { quote: "The future belongs to those who believe in the beauty of their dreams.", author: "Eleanor Roosevelt", color: "border-emerald-500" },
+  { quote: "Believe you can and you're halfway there.", author: "Theodore Roosevelt", color: "border-amber-500" },
+  { quote: "Don't watch the clock; do what it does. Keep going.", author: "Sam Levenson", color: "border-cyan-500" },
+  { quote: "The only limit to our realization of tomorrow will be our doubts of today.", author: "Franklin D. Roosevelt", color: "border-rose-500" },
+  { quote: "Whether you think you can or you think you can't, you're right.", author: "Henry Ford", color: "border-violet-500" },
+];
 
 export default function App() {
-  const [isChatOpen, setIsChatOpen] = useState(false);
   const [isFeedbackOpen, setIsFeedbackOpen] = useState(false);
   const [isRoutineOpen, setIsRoutineOpen] = useState(false);
 
   return (
     <div className="min-h-screen">
       <Navbar 
-        onChatOpen={() => setIsChatOpen(true)} 
         onFeedbackOpen={() => setIsFeedbackOpen(true)}
         onRoutineOpen={() => setIsRoutineOpen(true)}
       />
@@ -30,24 +39,26 @@ export default function App() {
       <main>
         <Hero onRoutineOpen={() => setIsRoutineOpen(true)} />
         
-        {/* Features Preview */}
-        <section className="py-20 px-6">
-          <div className="max-w-7xl mx-auto grid md:grid-cols-3 gap-8">
-            <FeatureCard 
-              icon={<ShieldCheck className="w-8 h-8 text-indigo-600" />}
-              title="Academic Support"
-              desc="Proven strategies to handle exams, group projects, and daily school stress."
-            />
-            <FeatureCard 
-              icon={<HeartHandshake className="w-8 h-8 text-purple-600" />}
-              title="Social Guidance"
-              desc="Navigating friendships, family, and relationships with confidence."
-            />
-            <FeatureCard 
-              icon={<Target className="w-8 h-8 text-pink-600" />}
-              title="Future Planning"
-              desc="Exploration tools for your career path without the early-life pressure."
-            />
+        {/* Inspiration Section (Greatest lines from greatest men) */}
+        <section className="py-24 px-6 bg-slate-50/50">
+          <div className="max-w-7xl mx-auto">
+            <div className="text-center mb-16">
+              <h2 className="text-3xl font-bold text-slate-900 mb-4">Words of Wisdom</h2>
+              <p className="text-slate-500 max-w-2xl mx-auto font-body">
+                Timeless advice from history's greatest minds to keep you motivated on your journey.
+              </p>
+            </div>
+            
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {QUOTES.map((q, index) => (
+                <QuoteCard 
+                  key={index}
+                  quote={q.quote}
+                  author={q.author}
+                  borderColor={q.color}
+                />
+              ))}
+            </div>
           </div>
         </section>
 
@@ -102,24 +113,23 @@ export default function App() {
         </div>
       </footer>
 
-      <Chatbot isOpen={isChatOpen} onToggle={(open) => setIsChatOpen(open)} />
       <FeedbackModal isOpen={isFeedbackOpen} onClose={() => setIsFeedbackOpen(false)} />
       <PersonalizedRoutineModal isOpen={isRoutineOpen} onClose={() => setIsRoutineOpen(false)} />
     </div>
   );
 }
 
-function FeatureCard({ icon, title, desc }: { icon: ReactNode, title: string, desc: string }) {
+function QuoteCard({ quote, author, borderColor }: { quote: string, author: string, borderColor: string }) {
   return (
     <motion.div 
       whileHover={{ y: -5 }}
-      className="p-8 rounded-3xl bg-white shadow-sm hover:shadow-xl transition-all border border-slate-100"
+      className={`p-8 rounded-3xl bg-white shadow-sm hover:shadow-xl transition-all border-l-4 ${borderColor}`}
     >
-      <div className="mb-6">{icon}</div>
-      <h3 className="text-xl font-bold mb-3 text-slate-800">{title}</h3>
-      <p className="text-slate-600 leading-relaxed font-body text-sm">
-        {desc}
+      <Quote className="w-8 h-8 text-slate-200 mb-6" />
+      <p className="text-lg font-medium mb-6 text-slate-700 italic leading-relaxed">
+        "{quote}"
       </p>
+      <h4 className="text-sm font-bold text-slate-400 uppercase tracking-widest">— {author}</h4>
     </motion.div>
   );
 }

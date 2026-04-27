@@ -45,7 +45,7 @@ export function Hero({ onRoutineOpen }: { onRoutineOpen: () => void }) {
               className="bg-white text-indigo-600 border-2 border-indigo-100 px-8 py-4 rounded-2xl font-bold text-lg hover:border-indigo-600 transition-all flex items-center gap-2 w-full sm:w-auto justify-center"
             >
               <CalendarClock className="w-5 h-5 text-indigo-500" />
-              Get My AI Routine
+              Build My Routine
             </button>
           </div>
 

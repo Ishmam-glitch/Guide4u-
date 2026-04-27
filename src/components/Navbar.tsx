@@ -8,8 +8,7 @@ import { useState } from 'react';
 import { Menu, X, MessageSquareHeart, CalendarClock } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 
-export function Navbar({ onChatOpen, onFeedbackOpen, onRoutineOpen }: { 
-  onChatOpen: () => void, 
+export function Navbar({ onFeedbackOpen, onRoutineOpen }: { 
   onFeedbackOpen: () => void,
   onRoutineOpen: () => void
 }) {
@@ -30,10 +29,10 @@ export function Navbar({ onChatOpen, onFeedbackOpen, onRoutineOpen }: {
         
         <div className="flex items-center gap-4">
           <button 
-            onClick={onChatOpen}
+            onClick={onRoutineOpen}
             className="hidden sm:block bg-slate-900 text-white px-5 py-2 rounded-xl text-sm font-semibold hover:bg-slate-800 transition-all shadow-md"
           >
-            Chat with AI
+            My Routine
           </button>
 
           <button 
@@ -82,19 +81,6 @@ export function Navbar({ onChatOpen, onFeedbackOpen, onRoutineOpen }: {
                     <span className="text-[10px] text-slate-400">Share your thoughts</span>
                   </div>
                 </button>
-
-                <div className="md:hidden border-t border-slate-50 my-1 pt-1">
-                   <button
-                    onClick={() => {
-                      onChatOpen();
-                      setIsMenuOpen(false);
-                    }}
-                    className="flex w-full items-center gap-3 px-4 py-3 hover:bg-indigo-50 text-slate-700 hover:text-indigo-600 rounded-xl transition-colors text-left"
-                  >
-                    <div className="w-5 h-5 bg-slate-900 rounded-md" />
-                    <span className="text-sm font-bold">Chat with AI</span>
-                  </button>
-                </div>
               </div>
             </motion.div>
           )}
