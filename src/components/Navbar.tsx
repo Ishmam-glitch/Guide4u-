@@ -5,12 +5,13 @@
 
 import { Logo } from './Logo';
 import { useState } from 'react';
-import { Menu, X, MessageSquareHeart, CalendarClock } from 'lucide-react';
+import { Menu, X, MessageSquareHeart, CalendarClock, BookMarked } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 
-export function Navbar({ onFeedbackOpen, onRoutineOpen }: { 
+export function Navbar({ onFeedbackOpen, onRoutineOpen, onStudyOpen }: { 
   onFeedbackOpen: () => void,
-  onRoutineOpen: () => void
+  onRoutineOpen: () => void,
+  onStudyOpen: () => void
 }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -28,6 +29,14 @@ export function Navbar({ onFeedbackOpen, onRoutineOpen }: {
         </div>
         
         <div className="flex items-center gap-4">
+          <button 
+            onClick={onStudyOpen}
+            className="hidden lg:flex items-center gap-2 text-slate-600 hover:text-indigo-600 px-4 py-2 rounded-xl text-sm font-semibold transition-all border border-slate-100 mr-2"
+          >
+            <BookMarked size={16} className="text-indigo-500" />
+            Study Hub
+          </button>
+          
           <button 
             onClick={onRoutineOpen}
             className="hidden sm:block bg-slate-900 text-white px-5 py-2 rounded-xl text-sm font-semibold hover:bg-slate-800 transition-all shadow-md"
@@ -54,6 +63,20 @@ export function Navbar({ onFeedbackOpen, onRoutineOpen }: {
               className="absolute top-full right-6 mt-2 w-64 bg-white rounded-2xl shadow-2xl border border-slate-100 p-2 overflow-hidden"
             >
               <div className="flex flex-col gap-1">
+                <button
+                  onClick={() => {
+                    onStudyOpen();
+                    setIsMenuOpen(false);
+                  }}
+                  className="flex items-center gap-3 px-4 py-3 hover:bg-indigo-50 text-slate-700 hover:text-indigo-600 rounded-xl transition-colors text-left"
+                >
+                  <BookMarked className="w-5 h-5" />
+                  <div className="flex flex-col">
+                    <span className="text-sm font-bold">Study Mastery</span>
+                    <span className="text-[10px] text-slate-400">Subject focus & tips</span>
+                  </div>
+                </button>
+
                 <button
                   onClick={() => {
                     onRoutineOpen();
